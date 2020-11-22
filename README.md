@@ -9,4 +9,4 @@
 
 
 ### Overview
-![Alt Text](https://github.com/aleksandramarjanovic/OnLineShop)
+![Alt Text](https://github.com/aleksandramarjanovic/OnLineShop/images.gif)
