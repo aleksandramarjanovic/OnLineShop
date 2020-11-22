@@ -1,0 +1,141 @@
+<ui:composition template="welcomePrimefaces.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+            <ui:debug hotkey="x" />
+            
+            <p:dialog header="Add product" widgetVar="productDialog" showEffect="fade" hideEffect="fade" resizable="false">
+                <h:form id="addDialogForm">
+                    <p:panel id="panel">
+                        <p:messages id="msgs" />
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="name" value="Name:" />
+                            <p:inputText id="name" value="#{productBean.newProduct.name}" required="true" label="name">
+                                <f:validateRegex pattern="[A-Za-z]{4,10}"/>
+                                <p:ajax update="msgName" event="keyup" />
+                            </p:inputText>
+                            <p:message for="name" id="msgName" display="icon" />
+                            
+                             <p:outputLabel for="price" value="Price:" />
+                             <p:inputNumber id="price" value="#{productBean.newProduct.price}" label="price" required="true" symbol="€" symbolPosition="s">
+                                 <f:validateDoubleRange minimum="5.00" maximum="5000.0"/>
+                              <p:ajax update="msgPrice" event="keyup" />
+                            </p:inputNumber>
+                            <p:message for="price" id="msgPrice" display="icon" />
+
+                            <p:outputLabel for="description" value="Description:" />
+                            <p:inputTextarea id="description" value="#{productBean.newProduct.description}" label="description">
+                                <p:ajax update="msgDescription" event="keyup" />
+                            </p:inputTextarea>
+                            <p:message for="description" id="msgDescription" display="icon" />
+                            
+                              <p:outputLabel for="quantity" value="Quantity:" />
+                              <p:inputText id="quantity" value="#{productBean.newProduct.quantity}" label="quantity" required="true">
+                                  <f:validateLongRange minimum="1" maximum="100"></f:validateLongRange>
+                             <p:ajax update="msgQuantity" event="keyup" />
+                            </p:inputText>
+                            <p:message for="quantity" id="msgQuantity" display="icon" />
+                        </h:panelGrid>
+                        <p:commandButton value="Save"  action="#{productBean.addProduct()}" update=":form:eventsDT" icon="pi pi-check" />
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            
+            
+            
+                
+            <p:dialog header="Update product"  widgetVar="updateDialog" showEffect="fade" hideEffect="fade" resizable="false">
+                <h:form id="updateDialogForm">
+                    <p:panel id="panel2">
+
+                        <p:messages id="msgs" />
+
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="name" value="Name:" />
+                            <p:inputText id="name" value="#{productBean.selectedProduct.name}" required="true" label="name">
+                                <f:validateLength minimum="2" />
+                            </p:inputText>
+                            <p:message for="name" display="icon" />
+                            
+                             <p:outputLabel for="price" value="Price:" />
+                             <p:inputText id="price" value="#{productBean.selectedProduct.price}" label="price" required="true">
+                                <p:ajax update="msgPrice" event="keyup" />
+                            </p:inputText>
+                            <p:message for="price" id="msgPrice" display="icon" />
+
+                            <p:outputLabel for="description" value="Description:" />
+                            <p:inputText id="description" value="#{productBean.selectedProduct.description}" label="description" required="true">
+                                <f:validateLength minimum="2" />
+                                <p:ajax update="msgDescription" event="keyup" />
+                            </p:inputText>
+                            <p:message for="description" id="msgDescription" display="icon" />
+                            
+                              <p:outputLabel for="quantity" value="Quantity:" />
+                              <p:inputText id="quantity" value="#{productBean.selectedProduct.quantity}" label="quantity" required="true">
+                             <p:ajax update="msgQuantity" event="keyup" />
+                            </p:inputText>
+                            <p:message for="quantity" id="msgQuantity" display="icon" />
+                        </h:panelGrid>
+                        <p:commandButton value="Update" update=":form:eventsDT" action="#{productBean.updateProduct()}" icon="pi pi-check" />
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            
+            
+             
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true" />
+                <div style="display: inline-block">
+                    <div style="float: left">
+                        <p:commandButton value="Add product" oncomplete="PF('productDialog').show()" update=":addDialogForm"></p:commandButton>
+                    </div>
+                    
+                    
+                    <div style="float: left">
+                        <p:commandButton id="deleteButton" value=" Delete product" 
+                                         action="#{productBean.deleteProduct()}" disabled="#{productBean.rowSelected}" update=":form:eventsDT">
+                        </p:commandButton>
+                    </div>
+                    
+
+                    <div style="float: left">
+                            <p:commandButton id="updateButton" value=" Update product"
+                                oncomplete="PF('updateDialog').show()" update=":updateDialogForm" disabled="#{productBean.rowSelected}">
+                            </p:commandButton>
+                    </div>
+
+                </div>
+                <p:dataTable id="eventsDT" var="product" value="#{productBean.products}" selectionMode="single" selection="#{productBean.selectedProduct}" rowKey="#{product.id}">
+                    <f:facet name="header">
+                        Products
+                    </f:facet>
+                    <p:ajax event="rowSelect" listener="#{productBean.onRowSelect}" update=":form:msgs :form:deleteButton :form:updateButton" />
+                    <p:ajax event="rowUnselect" listener="#{productBean.onRowUnselect}" update=":form:msgs :form:deleteButton :form:updateButton" />
+                    <p:column headerText="Id">
+                        <h:outputText value="#{product.id}" />
+                    </p:column>
+                    <p:column headerText="Name">
+                        <h:outputText value="#{product.name}" />
+                    </p:column>
+                    <p:column headerText="Price(€)">
+                        <h:outputText value="#{product.price}" />
+                    </p:column>
+                    <p:column headerText="Description">
+                        <h:outputText value="#{product.description}" />
+                    </p:column>
+                    <p:column headerText="quantity">
+                        <h:outputText value="#{product.quantity}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+           
+	</ui:define>
+</ui:composition>
+
+

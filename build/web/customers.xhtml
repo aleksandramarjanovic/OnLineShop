@@ -1,0 +1,167 @@
+<ui:composition template="welcomePrimefaces.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+            <ui:debug hotkey="x" />   
+            
+               <p:dialog header="Add customer" widgetVar="customerDialog" modal="true" appendTo="@(body)" showEffect="fade" hideEffect="fade" resizable="false">
+                <h:form id="DialogForm">
+                    <p:panel id="panel">
+                        <p:messages id="msgs" />
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="name" value="Name:" />
+                            <p:inputText id="name" value="#{customerBean.newCustomer.name}" required="true" label="name">
+                            <f:validateRegex pattern="^[a-zA-Z]{3,15}$"/>
+                            <p:ajax update="msgName" event="keyup" />
+                            </p:inputText>
+                            <p:message for="name" id="msgName" display="icon" />
+                            
+                            <p:outputLabel for="surname" value="Surname:" />
+                            <p:inputText id="surname" value="#{customerBean.newCustomer.surname}" label="surname" required="true">
+                                <f:validateRegex pattern="^[a-zA-Z]+$" />
+                                <p:ajax update="msgSurname" event="keyup" />
+                            </p:inputText>
+                            <p:message for="surname" id="msgSurname" display="icon" />
+
+                            <p:outputLabel for="password" value="Password:" />
+                            <p:password  id="password" value="#{customerBean.newCustomer.password}" label="password" required="true">
+                                <f:validateLength minimum="5" />
+                                <p:ajax update="msgPassword" event="keyup" />
+                            </p:password>
+                            <p:message for="password" id="msgPassword" display="icon" />
+                            
+                            <p:outputLabel for="email" value="Email:" />
+                            <p:inputText id="email" value="#{customerBean.newCustomer.email}" label="email" required="true">
+                                <f:validateRegex pattern="[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,4}"></f:validateRegex>
+                             <p:ajax update="msgEmail" event="keyup" />
+                            </p:inputText>
+                            <p:message for="email" id="msgEmail" display="icon" />
+                            
+                            <p:outputLabel for="phone_number" value="Phone_number:" />
+                            <p:inputText id="phone_number" value="#{customerBean.newCustomer.phone_number}" label="phone_number" required="true">
+                                 <f:validateRegex pattern="^\+[3][8][1]+\s+[6]+[0-9]{7,8}$"></f:validateRegex>
+                            <p:ajax update="msgPhone_number" event="keyup" />
+                            </p:inputText>
+                            <p:message for="phone_number" id="msgPhone_number" display="icon" />
+                            
+                            <p:outputLabel for="address" value="Address:" />
+                            <p:inputText id="address" value="#{customerBean.newCustomer.address}" label="address" required="true">
+                            <p:ajax update="msgAddress" event="keyup" />
+                            </p:inputText>
+                            <p:message for="address" id="msgAddress" display="icon" />
+                        </h:panelGrid>
+                        <p:commandButton value="Add"  action="#{customerBean.addCustomer()}" update=":form:customer" icon="pi pi-check" />
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            
+                <p:dialog header="Update customer" widgetVar="updateCustomerDialog" modal="true" appendTo="@(body)" showEffect="fade" hideEffect="fade" resizable="false">
+                <h:form id="DialogCustomerForm">
+                    <p:panel id="panel2">
+                        <p:messages id="msgs" />
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="name" value="Name:" />
+                            <p:inputText id="name" value="#{customerBean.selectedCustomer.name}" required="true" label="name">
+                              <f:validateRegex pattern="^[a-zA-Z]{3,15}$"/>
+                            </p:inputText>
+                            <p:message for="name" display="icon" />
+                            
+                            <p:outputLabel for="surname" value="Surname:" />
+                            <p:inputText id="surname" value="#{customerBean.selectedCustomer.surname}" label="surname" required="true">
+                                  <f:validateRegex pattern="^[a-zA-Z]+$"/>
+                                <p:ajax update="msgSurname" event="keyup" />
+                            </p:inputText>
+                            <p:message for="surname" id="msgSurname" display="icon" />
+
+                            <p:outputLabel for="password" value="Password:" />
+                            <p:inputText id="password" value="#{customerBean.selectedCustomer.password}" label="password" required="true">
+                                <f:validateLength minimum="5" />
+                                <p:ajax update="msgPassword" event="keyup" />
+                            </p:inputText>
+                            <p:message for="password" id="msgPassword" display="icon" />
+                            
+                             
+                            <p:outputLabel for="email" value="Email:" />
+                            <p:inputText id="email" value="#{customerBean.selectedCustomer.email}" label="email" required="true">
+                                <f:validateRegex pattern="[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,4}"></f:validateRegex>
+                            <p:ajax update="msgEmail" event="keyup" />
+                            </p:inputText>
+                            <p:message for="email" id="msgEmail" display="icon" />
+                            
+                            
+                            <p:outputLabel for="phone_number" value="Phone_number:" />
+                            <p:inputText id="phone_number" value="#{customerBean.selectedCustomer.phone_number}" label="phone_number" required="true">
+                                <f:validateRegex pattern="^\+[3][8][1]+\s+[6]+[0-9]{7,8}$"></f:validateRegex>
+                               
+                            <p:ajax update="msgPhone_number" event="keyup" />
+                            </p:inputText>
+                            <p:message for="phone_number" id="msgPhone_number" display="icon" />
+                            
+                            <p:outputLabel for="address" value="Address:" />
+                            <p:inputText id="address" value="#{customerBean.selectedCustomer.address}" label="address" required="true">
+                            <p:ajax update="msgAddress" event="keyup" />
+                            </p:inputText>
+                            <p:message for="address" id="msgAddress" display="icon" />
+                        </h:panelGrid>
+                        <p:commandButton value="Update"  action="#{customerBean.updateCustomer()}" update=":form:customer" icon="pi pi-check" />
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            
+            
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true" />
+                <div style="display: inline-block">
+                    <div style="float: left">
+                        <p:commandButton value="Add customer" oncomplete="PF('customerDialog').show()" update=":DialogForm"></p:commandButton>
+                    </div>
+
+                    <div style="float: left">
+                        <p:commandButton id="deleteButton" value=" Delete customer" disabled="#{customerBean.rowSelected}" action="#{customerBean.deleteCustomer()}" update=":form:customer"></p:commandButton>
+                    </div>
+
+                    <div style="float: left">
+                        <p:commandButton id="updateButton" value=" Update customer" oncomplete="PF('updateCustomerDialog').show()" disabled="#{customerBean.rowSelected}" update=":DialogCustomerForm"></p:commandButton>
+                    </div>
+
+                </div>
+
+                <p:dataTable id="customer" var="customer" value="#{customerBean.customers}" selectionMode="single" selection="#{customerBean.selectedCustomer}" rowKey="#{customer.id}">
+                    <f:facet name="header">
+                        Customers
+                    </f:facet>
+                     <p:ajax event="rowSelect" listener="#{customerBean.onRowSelect}" update=":form:msgs :form:deleteButton :form:updateButton" />
+                    <p:ajax event="rowUnselect" listener="#{customerBean.onRowUnselect}" update=":form:msgs :form:deleteButton :form:updateButton" />
+                    <p:column headerText="Id">
+                        <h:outputText value="#{customer.id}" />
+                    </p:column>
+                    <p:column headerText="Name">
+                        <h:outputText value="#{customer.name}" />
+                    </p:column>
+                    <p:column headerText="Surname">
+                        <h:outputText value="#{customer.surname}" />
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{customer.email}" />
+                    </p:column>
+                   <p:column headerText="Password">
+                       <h:outputText value="#{customer.password}" />
+                    </p:column>
+                      <p:column headerText="Phone_number">
+                          <h:outputText value="#{customer.phone_number}" />
+                    </p:column>
+                      <p:column headerText="Address">
+                          <h:outputText value="#{customer.address}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            
+	</ui:define>
+</ui:composition>
+

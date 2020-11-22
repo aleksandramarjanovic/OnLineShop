@@ -1,0 +1,25 @@
+<ui:composition template="welcomePrimefaces.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <fieldset>
+            <legend>Login form</legend>
+            <h:form id="loginForm">                
+                <p:growl id="msgs" showDetail="true" />
+                <h:outputLabel for="email">Email:</h:outputLabel><br></br>
+                <h:inputText id="email" value="#{shopBean.currentCustemer.email}"></h:inputText><br></br>
+                <h:outputLabel for="password">Password:</h:outputLabel><br></br>
+                <p:password id="password" value="#{shopBean.currentCustemer.password}" ></p:password><br></br>
+                <p:commandButton value="login" action="#{shopBean.validateEmailPassword()}" update=":loginForm:msgs" ></p:commandButton>
+                <p:commandButton value="cancel" onclick="window.open('index.xhtml')"></p:commandButton>
+               
+            </h:form>
+        </fieldset>
+    </ui:define>
+</ui:composition>
