@@ -3,5 +3,9 @@
 ### This application is using:
 
 * Java, PrimeFaces,Hibernate, MySQL
-### Overview
+### Overview:
+This application represents an online store.
+On the one side, you can perform CRUD operations on customers and products.
+On the other side, customers can sign up and buy some of the products offered.
+
 ![Alt Text](https://github.com/aleksandramarjanovic/OnLineShop/blob/master/images.gif)
